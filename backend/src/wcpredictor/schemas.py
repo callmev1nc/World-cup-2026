@@ -49,6 +49,51 @@ class Prediction(BaseModel):
     clv: dict[str, float] | None = None
 
 
+def finished_prediction(
+    *,
+    match_id: str,
+    round: str | None = None,
+    home: str | None = None,
+    away: str | None = None,
+    kickoff: datetime | None = None,
+    ft_home: int = 0,
+    ft_away: int = 0,
+    winner: str | None = None,
+    pens_home: int | None = None,
+    pens_away: int | None = None,
+    round_default: str = "R32",
+) -> dict:
+    """Build a complete, schema-valid finished-match prediction dict.
+
+    Construction goes through the Prediction model so every field with a
+    default (form_home=[], score_top=[], value_bets=[], team_stats={}, ...)
+    is filled — finished cards never omit keys that MarqueeMatch and the TS
+    Prediction type assume are present.
+    """
+    actual = f"{ft_home}-{ft_away}"
+    pred = Prediction(
+        match_id=match_id,
+        round=round or round_default,
+        home=home or "Unknown",
+        away=away or "Unknown",
+        kickoff=kickoff,
+        state="finished",
+        elo_home=1500,
+        elo_away=1500,
+        win=0.0,
+        draw=0.0,
+        loss=0.0,
+        predicted_score=actual,
+        btts_yes=0.0,
+        actual_score=actual,
+        result=winner,
+    )
+    d = pred.model_dump(mode="json")
+    if pens_home is not None and pens_away is not None:
+        d["pens"] = {"score": f"{pens_home}-{pens_away}", "winner": winner}
+    return d
+
+
 class MatchSummary(BaseModel):
     match_id: str
     round: str
