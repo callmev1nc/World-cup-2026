@@ -2,15 +2,16 @@
 Serves precomputed prediction JSON + the built SPA. No heavy imports
 (pandas/scipy/numpy run only at build time in backend/scripts/precompute.py).
 
-    /api/matches      -> static precomputed matches list
+    /api/matches      -> static precomputed matches list (merged with live store)
     /api/predict/{id} -> static prediction (patched if overlay says finished)
     /api/best-bets    -> top 8 +EV picks (filtered to drop finished)
-    /api/refresh      -> fetch ESPN results + resolve bracket (pure dict/httpx)
+    /api/refresh      -> fetch ESPN results + upsert into Supabase (auth required)
     /*                -> SPA (frontend/dist), index.html fallback
 
-vercel.json bundles frontend/dist + data/processed + data/raw/sample + data/state.
+vercel.json bundles frontend/dist + data/processed + data/raw/sample.
 """
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -18,14 +19,17 @@ _PATH = Path(__file__).parent
 sys.path.insert(0, str(_PATH.parent / "backend" / "src"))
 sys.path.insert(0, str(_PATH))
 
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from lib import get_fixtures, get_overlay, save_overlay, patch_finished
+from wcpredictor.schemas import finished_prediction
 
 DIST = Path(__file__).parent.parent / "frontend" / "dist"
 PROCESSED = Path(__file__).parent.parent / "data" / "processed"
+
+REFRESH_SECRET = os.getenv("REFRESH_SECRET", "")
 
 # --- Load precomputed data at module import (cheap — small JSON files) ---
 _predictions: dict[str, dict] = {}
@@ -48,7 +52,19 @@ app = FastAPI()
 
 @app.get("/matches")
 def get_matches():
-    return _matches
+    overlay = get_overlay()
+    merged = []
+    for m in _matches:
+        mid = m["match_id"]
+        if mid in overlay and overlay[mid].get("status") == "finished":
+            m = {**m, "state": "finished"}
+            ov = overlay[mid]
+            if "ft_home" in ov and "ft_away" in ov:
+                m["actual_score"] = f"{ov['ft_home']}-{ov['ft_away']}"
+            if ov.get("winner"):
+                m["result"] = ov["winner"]
+        merged.append(m)
+    return merged
 
 
 @app.get("/predict/{match_id}")
@@ -61,21 +77,18 @@ def get_predict(match_id: str):
             # No baked prediction (e.g. TBD slot resolved after deploy).
             fixtures = get_fixtures()
             fixture = next((f for f in fixtures if f["fixture_id"] == match_id), {})
-            pred = {
-                "match_id": match_id,
-                "round": fixture.get("round", "R32"),
-                "home": fixture.get("home", "Unknown"),
-                "away": fixture.get("away", "Unknown"),
-                "kickoff": fixture.get("kickoff"),
-                "state": "finished",
-                "elo_home": 1500,
-                "elo_away": 1500,
-                "win": 0.0,
-                "draw": 0.0,
-                "loss": 0.0,
-                "predicted_score": "",
-                "btts_yes": 0.0,
-            }
+            pred = finished_prediction(
+                match_id=match_id,
+                round=fixture.get("round"),
+                home=fixture.get("home"),
+                away=fixture.get("away"),
+                kickoff=fixture.get("kickoff"),
+                ft_home=fixture.get("ft_home", 0),
+                ft_away=fixture.get("ft_away", 0),
+                winner=fixture.get("winner"),
+                pens_home=fixture.get("pens_home"),
+                pens_away=fixture.get("pens_away"),
+            )
         return patch_finished(pred, overlay[match_id])
     # Return baked prediction.
     pred = _predictions.get(match_id)
@@ -86,32 +99,18 @@ def get_predict(match_id: str):
     fixtures = get_fixtures()
     fixture = next((f for f in fixtures if f["fixture_id"] == match_id), None)
     if fixture and fixture.get("status") == "finished":
-        actual = None
-        if "ft_home" in fixture and "ft_away" in fixture:
-            actual = f"{fixture['ft_home']}-{fixture['ft_away']}"
-        result = {
-            "match_id": match_id,
-            "round": fixture.get("round", "R32"),
-            "home": fixture.get("home", "Unknown"),
-            "away": fixture.get("away", "Unknown"),
-            "kickoff": fixture.get("kickoff"),
-            "state": "finished",
-            "elo_home": 1500,
-            "elo_away": 1500,
-            "win": 0.0,
-            "draw": 0.0,
-            "loss": 0.0,
-            "predicted_score": "",
-            "btts_yes": 0.0,
-            "actual_score": actual,
-            "result": fixture.get("winner"),
-        }
-        if "pens_home" in fixture and "pens_away" in fixture:
-            result["pens"] = {
-                "score": f"{fixture['pens_home']}-{fixture['pens_away']}",
-                "winner": fixture.get("winner"),
-            }
-        return result
+        return finished_prediction(
+            match_id=match_id,
+            round=fixture.get("round"),
+            home=fixture.get("home"),
+            away=fixture.get("away"),
+            kickoff=fixture.get("kickoff"),
+            ft_home=fixture.get("ft_home", 0),
+            ft_away=fixture.get("ft_away", 0),
+            winner=fixture.get("winner"),
+            pens_home=fixture.get("pens_home"),
+            pens_away=fixture.get("pens_away"),
+        )
 
     # Unknown match ID or TBD — return a pending card so the UI renders gracefully.
     return {
@@ -139,38 +138,34 @@ def get_best_bets():
 
 @app.post("/refresh")
 @app.get("/refresh")
-def get_refresh():
-    from wcpredictor.config import canonical
-    from wcpredictor.models.bracket import resolve as resolve_bracket
-    from wcpredictor.clients.results import fetch_finished
+async def post_refresh(request: Request):
+    # Shared-secret auth
+    secret = request.headers.get("x-refresh-secret", "")
+    if not REFRESH_SECRET or secret != REFRESH_SECRET:
+        return JSONResponse(status_code=403, content={"error": "forbidden"})
 
+    from wcpredictor.clients.espn import EspnSource
+
+    source = EspnSource()
+    fixtures = source.get_fixtures()
     overlay = get_overlay()
-    fixtures = get_fixtures()
     updated: list[str] = []
 
-    # Fetch finished matches from ESPN and merge into overlay.
-    feed = fetch_finished()
-    for key, res in feed.items():
-        parts = key.split("-", 1)
-        rev = f"{parts[1]}-{parts[0]}" if len(parts) == 2 else ""
-        for f in fixtures:
-            if f.get("tbd") or f.get("status") == "finished":
-                continue
-            k = f"{canonical(f['home'])}-{canonical(f['away'])}"
-            if k == key or (rev and k == rev):
-                f.update({"status": "finished", **res})
-                overlay[f["fixture_id"]] = {"status": "finished", **res}
-                updated.append(f["fixture_id"])
-                break
-
-    # Resolve bracket TBD slots based on finished results.
-    resolved = resolve_bracket(fixtures)
-    for fid in resolved:
-        f = next(x for x in fixtures if x["fixture_id"] == fid)
-        overlay[fid] = {k: f[k] for k in ("home", "away", "tbd") if k in f}
+    for f in fixtures:
+        if f.get("status") == "finished" or f.get("status") == "in_progress":
+            eid = f["fixture_id"]
+            overlay[eid] = {
+                "status": f["status"],
+                "ft_home": f.get("ft_home"),
+                "ft_away": f.get("ft_away"),
+                "pens_home": f.get("pens_home"),
+                "pens_away": f.get("pens_away"),
+                "winner": f.get("winner"),
+            }
+            updated.append(eid)
 
     save_overlay(overlay)
-    return {"updated": updated, "resolved": resolved}
+    return {"updated": updated, "resolved": []}
 
 
 @app.get("/backtest")
@@ -192,7 +187,6 @@ if (DIST / "assets").is_dir():
 @app.get("/{full_path:path}")
 def _spa(full_path: str):
     if full_path:
-        # Resolve and confirm the file is INSIDE dist (prevent ../ path traversal).
         candidate = (DIST / full_path).resolve()
         try:
             candidate.relative_to(DIST.resolve())
