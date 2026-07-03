@@ -14,6 +14,7 @@ TOURNAMENT_END = "20260719"
 ROUND_MAP: dict[str, str] = {
     "Round of 32": "R32",
     "Rd of 16": "R16",
+    "Round of 16": "R16",
     "Quarterfinals": "QF",
     "Semifinals": "SF",
     "3rd-Place Match": "3rd",
@@ -28,7 +29,7 @@ def _round_from_event(event: dict) -> str:
             return short
     if "Group" in note:
         return "Group"
-    return "R32"
+    return "R16"
 
 
 def _american_to_decimal(american: float) -> float:
