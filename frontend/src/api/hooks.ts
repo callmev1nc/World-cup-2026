@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Prediction, MatchSummary, BestBet } from "../types";
 
-const BASE = "http://localhost:8000";
+const BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:8000";
 
 async function fetcher<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`);
@@ -34,7 +34,7 @@ export function usePrediction(matchId: string | null) {
 export function useRefresh() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: () => fetch("http://localhost:8000/refresh", { method: "POST" }).then(r => r.json()),
+    mutationFn: () => fetch(`${BASE}/refresh`, { method: "POST" }).then(r => r.json()),
     onSuccess: () => qc.invalidateQueries(),
   });
 }

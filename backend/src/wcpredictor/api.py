@@ -133,7 +133,9 @@ def get_refresh():
 @app.on_event("startup")
 def _autopoll():
     import asyncio, os
-    if os.getenv("WCPREDICTOR_AUTOPOLL", "1") == "0":
+    # Off by default on Vercel (serverless: no long-lived process to host a poll).
+    default = "0" if os.getenv("VERCEL") else "1"
+    if os.getenv("WCPREDICTOR_AUTOPOLL", default) == "0":
         return
     async def loop():
         while True:
