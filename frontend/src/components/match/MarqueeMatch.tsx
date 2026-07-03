@@ -75,7 +75,8 @@ function formatKickoff(iso: string | null): string {
   });
 }
 
-function FormPips({ form }: { form: string[] }) {
+function FormPips({ form }: { form?: string[] }) {
+  if (!form || form.length === 0) return null;
   const c = (r: string) => (r === "W" ? "bg-neon" : r === "D" ? "bg-chalk-dim" : "bg-danger");
   return (
     <div className="flex gap-1">
