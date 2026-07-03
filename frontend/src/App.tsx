@@ -62,7 +62,11 @@ export default function App() {
     const playable = (m: { state: string }) =>
       m.state !== "finished" && m.state !== "pending";
     return (
-      list.find((m) => playable(m) && m.home.toLowerCase().includes("spain")) ??
+      list.find(
+        (m) =>
+          playable(m) &&
+          (m.home.toLowerCase().includes("spain") || m.away.toLowerCase().includes("spain")),
+      ) ??
       list.find((m) => playable(m)) ??
       list[0]
     )?.match_id ?? "";
@@ -115,7 +119,7 @@ export default function App() {
                         {m.home} <span className="text-chalk-dim">v</span> {m.away}
                       </span>
                       {m.state === "finished" && m.actual_score && (
-                        <span className="shrink-0 font-mono text-xs text-neon nums">FT {m.actual_score}</span>
+                        <span className="shrink-0 font-mono text-xs text-neon nums">{m.actual_score}</span>
                       )}
                       <span
                         className={clsx(
