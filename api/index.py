@@ -23,7 +23,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from lib import get_fixtures, get_overlay, save_overlay, patch_finished
+from lib import get_fixtures, get_overlay, save_overlay, patch_finished, merge_matches
 from wcpredictor.schemas import finished_prediction
 
 DIST = Path(__file__).parent.parent / "frontend" / "dist"
@@ -52,19 +52,7 @@ app = FastAPI()
 
 @app.get("/matches")
 def get_matches():
-    overlay = get_overlay()
-    merged = []
-    for m in _matches:
-        mid = m["match_id"]
-        if mid in overlay and overlay[mid].get("status") == "finished":
-            m = {**m, "state": "finished"}
-            ov = overlay[mid]
-            if "ft_home" in ov and "ft_away" in ov:
-                m["actual_score"] = f"{ov['ft_home']}-{ov['ft_away']}"
-            if ov.get("winner"):
-                m["result"] = ov["winner"]
-        merged.append(m)
-    return merged
+    return merge_matches(_matches, get_overlay(), _predictions)
 
 
 @app.get("/predict/{match_id}")
