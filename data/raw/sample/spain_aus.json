@@ -1,0 +1,129 @@
+{
+  "fixtures": [
+    {"fixture_id": "spain-aut", "round": "R32", "home": "Spain", "away": "Austria", "kickoff": "2026-07-02T19:00:00Z", "status": "not_started", "venue": "Inglewood"},
+    {"fixture_id": "por-cro", "round": "R32", "home": "Portugal", "away": "Croatia", "kickoff": "2026-07-02T23:00:00Z", "status": "not_started", "venue": "Toronto"},
+    {"fixture_id": "sui-alg", "round": "R32", "home": "Switzerland", "away": "Algeria", "kickoff": "2026-07-03T03:00:00Z", "status": "not_started", "venue": "Vancouver"},
+    {"fixture_id": "aus-egy", "round": "R32", "home": "Australia", "away": "Egypt", "kickoff": "2026-07-03T18:00:00Z", "status": "not_started", "venue": "Arlington"},
+    {"fixture_id": "arg-cpv", "round": "R32", "home": "Argentina", "away": "Cape Verde", "kickoff": "2026-07-03T22:00:00Z", "status": "not_started", "venue": "Miami Gardens"},
+    {"fixture_id": "col-gha", "round": "R32", "home": "Colombia", "away": "Ghana", "kickoff": "2026-07-04T01:30:00Z", "status": "not_started", "venue": "Kansas City"},
+    {"fixture_id": "rsa-can", "round": "R32", "home": "South Africa", "away": "Canada", "kickoff": "2026-06-28T19:00:00Z", "status": "finished", "venue": "Inglewood", "ft_home": 0, "ft_away": 1, "winner": "away"},
+    {"fixture_id": "bra-jpn", "round": "R32", "home": "Brazil", "away": "Japan", "kickoff": "2026-06-29T17:00:00Z", "status": "finished", "venue": "Houston", "ft_home": 2, "ft_away": 1, "winner": "home"},
+    {"fixture_id": "ger-par", "round": "R32", "home": "Germany", "away": "Paraguay", "kickoff": "2026-06-29T20:30:00Z", "status": "finished", "venue": "Foxborough", "ft_home": 1, "ft_away": 1, "pens_home": 3, "pens_away": 4, "winner": "away"},
+    {"fixture_id": "ned-mar", "round": "R32", "home": "Netherlands", "away": "Morocco", "kickoff": "2026-06-29T22:30:00Z", "status": "finished", "venue": "Guadalupe", "ft_home": 1, "ft_away": 1, "pens_home": 2, "pens_away": 3, "winner": "away"},
+    {"fixture_id": "civ-nor", "round": "R32", "home": "Côte d'Ivoire", "away": "Norway", "kickoff": "2026-06-30T17:00:00Z", "status": "finished", "venue": "Arlington", "ft_home": 1, "ft_away": 2, "winner": "away"},
+    {"fixture_id": "fra-swe", "round": "R32", "home": "France", "away": "Sweden", "kickoff": "2026-06-30T21:00:00Z", "status": "finished", "venue": "East Rutherford", "ft_home": 3, "ft_away": 0, "winner": "home"},
+    {"fixture_id": "mex-ecu", "round": "R32", "home": "Mexico", "away": "Ecuador", "kickoff": "2026-07-01T02:00:00Z", "status": "finished", "venue": "Mexico City", "ft_home": 2, "ft_away": 0, "winner": "home"},
+    {"fixture_id": "eng-cod", "round": "R32", "home": "England", "away": "Congo DR", "kickoff": "2026-07-01T16:00:00Z", "status": "finished", "venue": "Atlanta", "ft_home": 2, "ft_away": 1, "winner": "home"},
+    {"fixture_id": "bel-sen", "round": "R32", "home": "Belgium", "away": "Senegal", "kickoff": "2026-07-01T20:00:00Z", "status": "finished", "venue": "Seattle", "ft_home": 3, "ft_away": 2, "winner": "home"},
+    {"fixture_id": "usa-bih", "round": "R32", "home": "USA", "away": "Bosnia & Herzegovina", "kickoff": "2026-07-02T00:00:00Z", "status": "finished", "venue": "Santa Clara", "ft_home": 2, "ft_away": 0, "winner": "home"},
+
+    {"fixture_id": "can-mar", "round": "R16", "home": "Canada", "away": "Morocco", "kickoff": "2026-07-04T17:00:00Z", "status": "not_started", "venue": "Houston"},
+    {"fixture_id": "par-fra", "round": "R16", "home": "Paraguay", "away": "France", "kickoff": "2026-07-04T21:00:00Z", "status": "not_started", "venue": "Philadelphia"},
+    {"fixture_id": "bra-nor", "round": "R16", "home": "Brazil", "away": "Norway", "kickoff": "2026-07-05T20:00:00Z", "status": "not_started", "venue": "East Rutherford"},
+    {"fixture_id": "mex-eng", "round": "R16", "home": "Mexico", "away": "England", "kickoff": "2026-07-06T00:00:00Z", "status": "not_started", "venue": "Mexico City"},
+    {"fixture_id": "usa-bel", "round": "R16", "home": "USA", "away": "Belgium", "kickoff": "2026-07-07T00:00:00Z", "status": "not_started", "venue": "Seattle"},
+    {"fixture_id": "r16-a", "round": "R16", "home": "TBD", "away": "TBD", "kickoff": "2026-07-06T19:00:00Z", "status": "not_started", "venue": "Arlington", "tbd": true, "links": {"home_from": "por-cro", "away_from": "spain-aut"}},
+    {"fixture_id": "r16-b", "round": "R16", "home": "TBD", "away": "TBD", "kickoff": "2026-07-07T16:00:00Z", "status": "not_started", "venue": "Atlanta", "tbd": true, "links": {"home_from": "arg-cpv", "away_from": "aus-egy"}},
+    {"fixture_id": "r16-c", "round": "R16", "home": "TBD", "away": "TBD", "kickoff": "2026-07-07T20:00:00Z", "status": "not_started", "venue": "Vancouver", "tbd": true, "links": {"home_from": "sui-alg", "away_from": "col-gha"}},
+    {"fixture_id": "qf-1", "round": "QF", "home": "TBD", "away": "TBD", "kickoff": "2026-07-09T20:00:00Z", "status": "not_started", "venue": "Foxborough", "tbd": true, "links": {"home_from": "par-fra", "away_from": "can-mar"}},
+    {"fixture_id": "qf-2", "round": "QF", "home": "TBD", "away": "TBD", "kickoff": "2026-07-10T19:00:00Z", "status": "not_started", "venue": "Inglewood", "tbd": true, "links": {"home_from": "r16-a", "away_from": "usa-bel"}},
+    {"fixture_id": "qf-3", "round": "QF", "home": "TBD", "away": "TBD", "kickoff": "2026-07-11T21:00:00Z", "status": "not_started", "venue": "Miami Gardens", "tbd": true, "links": {"home_from": "bra-nor", "away_from": "mex-eng"}},
+    {"fixture_id": "qf-4", "round": "QF", "home": "TBD", "away": "TBD", "kickoff": "2026-07-12T01:00:00Z", "status": "not_started", "venue": "Kansas City", "tbd": true, "links": {"home_from": "r16-b", "away_from": "r16-c"}},
+    {"fixture_id": "sf-1", "round": "SF", "home": "TBD", "away": "TBD", "kickoff": "2026-07-14T19:00:00Z", "status": "not_started", "venue": "Arlington", "tbd": true, "links": {"home_from": "qf-1", "away_from": "qf-2"}},
+    {"fixture_id": "sf-2", "round": "SF", "home": "TBD", "away": "TBD", "kickoff": "2026-07-15T19:00:00Z", "status": "not_started", "venue": "Atlanta", "tbd": true, "links": {"home_from": "qf-3", "away_from": "qf-4"}},
+    {"fixture_id": "final", "round": "Final", "home": "TBD", "away": "TBD", "kickoff": "2026-07-19T19:00:00Z", "status": "not_started", "venue": "East Rutherford", "tbd": true, "links": {"home_from": "sf-1", "away_from": "sf-2"}}
+  ],
+  "recent_results": {
+    "Spain": [
+      {"date": "2026-06-20", "home": "Spain", "away": "France", "hs": 2, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-15", "home": "Spain", "away": "Portugal", "hs": 1, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-10", "home": "Switzerland", "away": "Spain", "hs": 0, "as": 3, "tier": "friendly"}
+    ],
+    "Austria": [
+      {"date": "2026-06-19", "home": "Austria", "away": "Switzerland", "hs": 2, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-14", "home": "Turkey", "away": "Austria", "hs": 1, "as": 2, "tier": "friendly"},
+      {"date": "2026-06-09", "home": "Austria", "away": "Slovakia", "hs": 1, "as": 1, "tier": "friendly"}
+    ],
+    "Portugal": [
+      {"date": "2026-06-20", "home": "Portugal", "away": "Ireland", "hs": 3, "as": 0, "tier": "friendly"},
+      {"date": "2026-06-12", "home": "Croatia", "away": "Portugal", "hs": 1, "as": 1, "tier": "friendly"}
+    ],
+    "Croatia": [
+      {"date": "2026-06-20", "home": "Croatia", "away": "Albania", "hs": 2, "as": 0, "tier": "friendly"},
+      {"date": "2026-06-12", "home": "Croatia", "away": "Portugal", "hs": 1, "as": 1, "tier": "friendly"}
+    ],
+
+    "France": [
+      {"date": "2026-06-18", "home": "France", "away": "Croatia", "hs": 3, "as": 0, "tier": "friendly"},
+      {"date": "2026-06-12", "home": "France", "away": "Germany", "hs": 2, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-07", "home": "Scotland", "away": "France", "hs": 0, "as": 3, "tier": "friendly"},
+      {"date": "2026-05-30", "home": "France", "away": "Poland", "hs": 2, "as": 0, "tier": "friendly"}
+    ],
+    "Brazil": [
+      {"date": "2026-06-17", "home": "Brazil", "away": "Bolivia", "hs": 3, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-11", "home": "Italy", "away": "Brazil", "hs": 2, "as": 2, "tier": "friendly"},
+      {"date": "2026-06-06", "home": "Brazil", "away": "South Korea", "hs": 2, "as": 1, "tier": "friendly"},
+      {"date": "2026-05-29", "home": "Brazil", "away": "Senegal", "hs": 1, "as": 0, "tier": "friendly"}
+    ],
+    "England": [
+      {"date": "2026-06-18", "home": "England", "away": "Wales", "hs": 3, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-11", "home": "England", "away": "Netherlands", "hs": 2, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-06", "home": "England", "away": "Nigeria", "hs": 2, "as": 0, "tier": "friendly"},
+      {"date": "2026-05-30", "home": "Iceland", "away": "England", "hs": 0, "as": 3, "tier": "friendly"}
+    ],
+    "Belgium": [
+      {"date": "2026-06-17", "home": "Belgium", "away": "Romania", "hs": 2, "as": 0, "tier": "friendly"},
+      {"date": "2026-06-10", "home": "Belgium", "away": "Netherlands", "hs": 1, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-05", "home": "Belgium", "away": "Montenegro", "hs": 2, "as": 1, "tier": "friendly"},
+      {"date": "2026-05-29", "home": "Belgium", "away": "Luxembourg", "hs": 3, "as": 0, "tier": "friendly"}
+    ],
+    "Mexico": [
+      {"date": "2026-06-16", "home": "Mexico", "away": "Uruguay", "hs": 2, "as": 0, "tier": "friendly"},
+      {"date": "2026-06-10", "home": "Colombia", "away": "Mexico", "hs": 1, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-05", "home": "Mexico", "away": "Guatemala", "hs": 3, "as": 1, "tier": "friendly"},
+      {"date": "2026-05-28", "home": "Mexico", "away": "Panama", "hs": 2, "as": 1, "tier": "friendly"}
+    ],
+    "Morocco": [
+      {"date": "2026-06-17", "home": "Morocco", "away": "Tunisia", "hs": 2, "as": 0, "tier": "friendly"},
+      {"date": "2026-06-10", "home": "Senegal", "away": "Morocco", "hs": 1, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-05", "home": "Morocco", "away": "Mauritania", "hs": 3, "as": 1, "tier": "friendly"},
+      {"date": "2026-05-29", "home": "Morocco", "away": "Burkina Faso", "hs": 1, "as": 0, "tier": "friendly"}
+    ],
+    "USA": [
+      {"date": "2026-06-15", "home": "USA", "away": "Costa Rica", "hs": 2, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-10", "home": "USA", "away": "Colombia", "hs": 0, "as": 2, "tier": "friendly"},
+      {"date": "2026-06-05", "home": "USA", "away": "Uzbekistan", "hs": 3, "as": 0, "tier": "friendly"},
+      {"date": "2026-05-28", "home": "USA", "away": "Iceland", "hs": 1, "as": 1, "tier": "friendly"}
+    ],
+    "Norway": [
+      {"date": "2026-06-16", "home": "Norway", "away": "Sweden", "hs": 2, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-10", "home": "Denmark", "away": "Norway", "hs": 1, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-05", "home": "Norway", "away": "Finland", "hs": 3, "as": 0, "tier": "friendly"},
+      {"date": "2026-05-29", "home": "Norway", "away": "Kosovo", "hs": 2, "as": 0, "tier": "friendly"}
+    ],
+    "Paraguay": [
+      {"date": "2026-06-15", "home": "Paraguay", "away": "Peru", "hs": 1, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-10", "home": "Argentina", "away": "Paraguay", "hs": 2, "as": 0, "tier": "friendly"},
+      {"date": "2026-06-05", "home": "Paraguay", "away": "Bolivia", "hs": 2, "as": 1, "tier": "friendly"},
+      {"date": "2026-05-28", "home": "Paraguay", "away": "Chile", "hs": 0, "as": 0, "tier": "friendly"}
+    ],
+    "Canada": [
+      {"date": "2026-06-15", "home": "Canada", "away": "Japan", "hs": 1, "as": 1, "tier": "friendly"},
+      {"date": "2026-06-09", "home": "Netherlands", "away": "Canada", "hs": 2, "as": 0, "tier": "friendly"},
+      {"date": "2026-06-04", "home": "Canada", "away": "Honduras", "hs": 2, "as": 0, "tier": "friendly"},
+      {"date": "2026-05-27", "home": "Costa Rica", "away": "Canada", "hs": 2, "as": 1, "tier": "friendly"}
+    ]
+  },
+  "odds": {
+    "spain-aut": {"h2h": [1.70, 3.80, 5.00], "ou25": [1.61, 2.30], "btts": [1.95, 1.85], "dc": [1.15, 2.20, 1.30]},
+    "por-cro": {"h2h": [1.95, 3.40, 4.20], "ou25": [1.85, 1.95], "btts": [1.90, 1.90]},
+    "bel-sen": {"h2h": [1.90, 3.60, 4.00]},
+    "fra-swe": {"h2h": [1.55, 4.20, 6.00]},
+    "arg-cpv": {"h2h": [1.25, 6.50, 12.0]},
+    "can-mar": {"h2h": [3.20, 3.30, 2.15], "ou25": [2.05, 1.75], "btts": [2.10, 1.70]},
+    "par-fra": {"h2h": [5.50, 3.80, 1.60], "ou25": [1.80, 2.00], "btts": [2.25, 1.60]},
+    "bra-nor": {"h2h": [1.75, 3.50, 4.50], "ou25": [1.90, 1.85], "btts": [1.90, 1.85]},
+    "mex-eng": {"h2h": [2.70, 3.10, 2.55], "ou25": [2.15, 1.65], "btts": [2.00, 1.78]},
+    "usa-bel": {"h2h": [2.90, 3.20, 2.40], "ou25": [2.00, 1.80], "btts": [2.05, 1.73]}
+  }
+}

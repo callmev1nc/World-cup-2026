@@ -1,0 +1,16 @@
+.venv/
+node_modules/
+cache/
+data/raw/api_football/
+data/raw/odds_api/
+data/raw/kaggle/
+data/state/
+reports/
+*.log
+.env
+.env.local
+__pycache__/
+*.pyc
+.DS_Store
+dist/
+.vercel/

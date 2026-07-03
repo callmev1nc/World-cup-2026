@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+
+body { @apply bg-pitch text-chalk font-sans; }
+
+/* Mowed-grass stripes — the classic pitch mow pattern (vertical bands). */
+.mowed {
+  background-color: #2f7a35;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #2f7a35 0 64px,
+    #286c2e 64px 128px
+  );
+}
+
+/* Tabular numerals for scorelines / stats. */
+.nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Floodlight halo on hover for cards (warm amber, not cold neon). */
+.halo:hover {
+  box-shadow: 0 0 0 1px rgba(246, 248, 244, 0.18), 0 18px 50px -18px rgba(0, 0, 0, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
