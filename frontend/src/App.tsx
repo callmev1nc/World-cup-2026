@@ -114,6 +114,9 @@ export default function App() {
                       <span className="truncate font-display text-lg tracking-wide text-chalk">
                         {m.home} <span className="text-chalk-dim">v</span> {m.away}
                       </span>
+                      {m.state === "finished" && m.actual_score && (
+                        <span className="shrink-0 font-mono text-xs text-neon nums">FT {m.actual_score}</span>
+                      )}
                       <span
                         className={clsx(
                           "shrink-0 rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider",
