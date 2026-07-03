@@ -62,6 +62,9 @@ export interface MatchSummary {
   away: string;
   kickoff: string | null;
   state: MatchState;
+  actual_score?: string | null;
+  result?: string | null;
+  pens?: { score: string; winner: string } | null;
 }
 
 // One +EV pick from GET /best-bets — a ValueBet tagged with its match context.

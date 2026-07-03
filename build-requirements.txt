@@ -1,0 +1,7 @@
+# Build-time deps for backend/scripts/precompute.py.
+# Installed only in the build step (not bundled into the serverless function).
+pandas>=2.2
+scipy>=1.13
+numpy>=1.26
+httpx>=0.27
+pydantic>=2.7

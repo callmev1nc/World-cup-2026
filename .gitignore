@@ -5,6 +5,7 @@ data/raw/api_football/
 data/raw/odds_api/
 data/raw/kaggle/
 data/state/
+data/processed/
 reports/
 *.log
 .env
@@ -14,3 +15,5 @@ __pycache__/
 .DS_Store
 dist/
 .vercel/
+
+.vercel

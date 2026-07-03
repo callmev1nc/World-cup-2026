@@ -26,7 +26,7 @@ const flipIn: Variants = {
 const ABBR: Record<string, string> = {
   spain: "ESP", austria: "AUT", portugal: "POR", croatia: "CRO", belgium: "BEL", senegal: "SEN",
   england: "ENG", "congo dr": "CGO", "dr congo": "CGO", usa: "USA", "united states": "USA",
-  "bosnia & herzegovina": "BIH", france: "FRA", sweden: "SWE", "south africa": "RSA", canada: "CAN",
+  "bosnia & herzegovina": "BIH", "bosnia-herzegovina": "BIH", "bosnia and herzegovina": "BIH", france: "FRA", sweden: "SWE", "south africa": "RSA", canada: "CAN",
   "côte d'ivoire": "CIV", "cote d'ivoire": "CIV", "ivory coast": "CIV", norway: "NOR",
   brazil: "BRA", japan: "JPN", germany: "GER", paraguay: "PAR", netherlands: "NED",
   morocco: "MAR", mexico: "MEX", ecuador: "ECU", switzerland: "SUI", algeria: "ALG",
@@ -75,7 +75,8 @@ function formatKickoff(iso: string | null): string {
   });
 }
 
-function FormPips({ form }: { form: string[] }) {
+function FormPips({ form }: { form?: string[] }) {
+  if (!form || form.length === 0) return null;
   const c = (r: string) => (r === "W" ? "bg-neon" : r === "D" ? "bg-chalk-dim" : "bg-danger");
   return (
     <div className="flex gap-1">

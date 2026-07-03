@@ -17,17 +17,16 @@ def _espn() -> dict:
     return {}
 
 def fetch_finished() -> dict:
-    """Return {fixture_key: {ft_home, ft_away, pens_home, pens_away, winner}}
-    for finished WC matches. Best-effort; {} on any failure."""
-    if os.getenv("API_FOOTBALL_KEY"):
-        try:
-            from .api_football import ApiFootballClient
-        except Exception:
-            pass
+    """Return {fixture_key: {ft_home, ft_away, winner}} for finished WC matches.
+
+    Best-effort; {} on any failure. Note: shootout/pens numbers are parsed only
+    in clients/espn.py (used by /refresh); this shim does not emit them.
+    """
     out: dict = {}
     data = _espn()
     for ev in data.get("events", []):
-        if ev.get("status", {}).get("type", {}).get("name") != "STATUS_FINAL":
+        st = ev.get("status", {}).get("type", {})
+        if not (st.get("completed", False) or st.get("state") == "post"):
             continue
         comps = ev.get("competitions", [{}])[0].get("competitors", [])
         if len(comps) < 2:

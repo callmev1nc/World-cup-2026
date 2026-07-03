@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import clsx from "clsx";
 import type { Prediction } from "./types";
 import { AppShell } from "./components/shell/AppShell";
@@ -8,7 +8,7 @@ import { BestBets } from "./components/match/BestBets";
 import { useMatches, usePrediction, useBestBets } from "./api/hooks";
 
 const FALLBACK: Prediction = {
-  match_id: "spain-aut",
+  match_id: "",
   round: "R32",
   home: "Spain",
   away: "Austria",
@@ -53,9 +53,30 @@ const STATE_LABEL: Record<string, string> = {
 };
 
 export default function App() {
-  const [selectedId, setSelectedId] = useState<string>("spain-aut");
   const [selectedRound, setSelectedRound] = useState<string>("R32");
   const { data: matches } = useMatches();
+
+  // Default to Spain's next scheduled match (marquee scope lock), else first upcoming.
+  const defaultId = useMemo(() => {
+    const list = matches ?? [];
+    const playable = (m: { state: string }) =>
+      m.state !== "finished" && m.state !== "pending";
+    return (
+      list.find(
+        (m) =>
+          playable(m) &&
+          (m.home.toLowerCase().includes("spain") || m.away.toLowerCase().includes("spain")),
+      ) ??
+      list.find((m) => playable(m)) ??
+      list[0]
+    )?.match_id ?? "";
+  }, [matches]);
+
+  const [selectedId, setSelectedId] = useState<string>("");
+  useEffect(() => {
+    if (!selectedId && defaultId) setSelectedId(defaultId);
+  }, [selectedId, defaultId]);
+
   const { data: prediction } = usePrediction(selectedId);
   const { data: bestBets } = useBestBets();
 
@@ -97,6 +118,9 @@ export default function App() {
                       <span className="truncate font-display text-lg tracking-wide text-chalk">
                         {m.home} <span className="text-chalk-dim">v</span> {m.away}
                       </span>
+                      {m.state === "finished" && m.actual_score && (
+                        <span className="shrink-0 font-mono text-xs text-neon nums">{m.actual_score}</span>
+                      )}
                       <span
                         className={clsx(
                           "shrink-0 rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider",
