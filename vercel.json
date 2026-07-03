@@ -3,7 +3,7 @@
   "buildCommand": "bash scripts/vercel_build.sh",
   "functions": {
     "api/index.py": {
-      "includeFiles": "{frontend/dist/**,data/raw/kaggle/**}",
+      "includeFiles": "{frontend/dist/**,data/processed/**,data/raw/sample/spain_aus.json,data/state/**}",
       "maxDuration": 30
     }
   },
