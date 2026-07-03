@@ -8,30 +8,50 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
+from wcpredictor.clients.espn import EspnSource
 from wcpredictor.clients.sample import SampleSource
-from wcpredictor.pipeline import predict, list_matches, refresh
-from wcpredictor.schemas import Prediction
+from wcpredictor.pipeline import predict, list_matches
+from wcpredictor.schemas import Prediction, finished_prediction
 
 DATA = Path(__file__).parents[2] / "data"
 PROCESSED = DATA / "processed"
-SAMPLE_FILE = DATA / "raw" / "sample" / "spain_aus.json"
 
 
 def main() -> None:
-    source = SampleSource(SAMPLE_FILE)
+    # Try ESPN first; fall back to sample data for dev/offline.
+    try:
+        source = EspnSource()
+        fixtures = source.get_fixtures()
+        if not fixtures:
+            raise ValueError("empty ESPN response")
+        print(f"  source: ESPN ({len(fixtures)} fixtures)")
+    except Exception as e:
+        print(f"  ESPN unavailable ({e}), falling back to SampleSource")
+        source = SampleSource()
+        fixtures = source.get_fixtures()
 
-    # Step 1: apply the current overlay + bracket resolution so any slots
-    # already resolved at build time get baked into the precomputed data.
-    refresh(source, feed=None)
-
-    # Step 2: precompute predictions for every non-TBD, non-finished fixture
-    fixtures = source.get_fixtures()
+    # Step 1: precompute predictions for every non-TBD, non-finished fixture
     predictions: dict[str, dict] = {}
     for f in fixtures:
         fid: str = f["fixture_id"]
         if f.get("tbd"):
             continue
         if f.get("status") == "finished":
+            from datetime import datetime
+            kickoff = datetime.fromisoformat(f["kickoff"]) if f.get("kickoff") else None
+            predictions[fid] = finished_prediction(
+                match_id=fid,
+                round=f.get("round", "R32"),
+                home=f.get("home"),
+                away=f.get("away"),
+                kickoff=kickoff,
+                ft_home=f.get("ft_home", 0),
+                ft_away=f.get("ft_away", 0),
+                winner=f.get("winner"),
+                pens_home=f.get("pens_home"),
+                pens_away=f.get("pens_away"),
+            )
+            print(f"  baked finished {fid}: {f.get('home')} vs {f.get('away')}")
             continue
         from datetime import datetime
         kickoff = datetime.fromisoformat(f["kickoff"]) if f.get("kickoff") else None
@@ -49,7 +69,7 @@ def main() -> None:
         except Exception as e:
             print(f"  SKIP {fid}: {e}")
 
-    # Step 3: build best_bets the same way api.py does
+    # Step 2: build best_bets the same way api.py does
     picks: list[dict] = []
     for fid, pred in predictions.items():
         fixture = next((f for f in fixtures if f["fixture_id"] == fid), {})
@@ -64,10 +84,10 @@ def main() -> None:
     picks.sort(key=lambda v: v["edge"], reverse=True)
     best_bets = picks[:8]
 
-    # Step 4: build matches list from list_matches output
+    # Step 3: build matches list from list_matches output
     matches = [ms.model_dump(mode="json") for ms in list_matches(source)]
 
-    # Step 5: write processed JSON files
+    # Step 4: write processed JSON files
     PROCESSED.mkdir(parents=True, exist_ok=True)
     for name, data in [
         ("predictions.json", predictions),
