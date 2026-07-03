@@ -22,6 +22,7 @@ sys.path.insert(0, str(_PATH))
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 from lib import get_fixtures, get_overlay, save_overlay, patch_finished, merge_matches
 from wcpredictor.schemas import finished_prediction
@@ -48,6 +49,14 @@ for name in ("predictions.json", "best_bets.json", "matches.json"):
             _matches = data
 
 app = FastAPI()
+
+_cors = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:5174,http://localhost:5175")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[o.strip() for o in _cors.split(",") if o.strip()],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/matches")
